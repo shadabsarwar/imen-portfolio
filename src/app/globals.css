@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+/*
+  Imene Adjissi — rose brand system.
+
+  Built on the four-swatch palette:
+    #5D3140 wine · #CF4173 pink · #F39399 coral · #F6D8BD peach
+
+  All four are used verbatim. Two neutrals are derived because the swatch has
+  no true dark and no true light: `ink` goes deeper than the wine so video
+  tiles, scrims and dark sections still read as dark (wine alone is L*26 — a
+  mid-tone, which would put a plum wash behind every clip), and `ivory` is a
+  lighter tint of the peach so adjacent sections can separate.
+
+  Token NAMES are legacy (gold/camel are now pink/coral). Renaming touches
+  ~490 call sites, so it's a separate mechanical pass once the palette is
+  signed off — not mixed into a change you have to eyeball.
+
+  Contrast, measured: ink/ivory 15.9 · wine/peach 7.8 · coral/ink 7.7 ·
+  pink/peach 3.3 (large text — the old gold managed only 2.9).
+*/
+@theme {
+  --color-ivory: #fdf6ee; /* derived — lightest ground, a peach tint */
+  --color-cream: #f6d8bd; /* palette peach — the signature surface */
+  --color-cream-deep: #f0c49f; /* derived — a deeper band against cream */
+  --color-sand: #eab5a4; /* derived — bridges peach into coral */
+  --color-camel: #f39399; /* palette coral — hairlines and soft fills */
+  --color-gold: #cf4173; /* palette pink — the accent, the only "click me" */
+  --color-gold-soft: #f39399; /* palette coral — the accent on dark ground */
+  /* The pink is a button colour, not a caption colour: at 11px on peach it
+     manages 3.3:1. This is the same hue taken deep enough to clear AA (5.0
+     on peach, 6.3 on ivory) and is what every small uppercase eyebrow uses. */
+  --color-gold-deep: #a62c55;
+  --color-ink: #2a161e; /* derived — deep wine, darks and scrims */
+  --color-ink-soft: #5d3140; /* palette wine — body copy */
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-arabic: var(--font-cairo), "Segoe UI", Tahoma, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+/*
+  Arabic swaps both faces. Fraunces and Geist carry no Arabic glyphs, so
+  leaving them in place would drop every heading and paragraph to a system
+  fallback — Cairo is already loaded for the ghosted الاسم in the hero, so
+  it costs nothing here.
+
+  `html[lang="ar"]` (0,1,1) outranks the `:root` block Tailwind's @theme
+  emits (0,1,0), so these win without !important.
+*/
+html[lang="ar"] {
+  --font-sans: var(--font-cairo), "Segoe UI", Tahoma, sans-serif;
+  --font-display: var(--font-cairo), Georgia, serif;
+}
+
+/* Arabic runs looser than Latin at the same size and clips its descenders. */
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3 {
+  line-height: 1.35;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ivory);
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Anchored sections clear the fixed glass navbar. */
+section[id] {
+  scroll-margin-top: 6rem;
+}
+/*
+  …except one that already owns a whole viewport. Those carry their own top
+  padding to clear the navbar, so the extra offset only pushes their last row
+  below the fold on arrival.
+
+  This lives here rather than as a `scroll-mt-0` utility on the element: the
+  rule above is unlayered, and unlayered styles beat anything in Tailwind's
+  utility layer no matter how specific.
+*/
+section[id][data-viewport] {
+  scroll-margin-top: 0;
+}
+
+/* Consultation banner box — the old py-12 / md:py-16, +12.5px each side (+25px total height). */
+.consult-box {
+  padding-block: calc(3rem + 12.5px);
+}
+@media (min-width: 768px) {
+  .consult-box {
+    padding-block: calc(4rem + 12.5px);
+  }
+}
+
+/* Brand marquee — two rows running in opposite directions. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.animate-marquee,
+.animate-marquee-reverse {
+  width: max-content;
+  animation-duration: 36s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.animate-marquee {
+  animation-name: marquee;
+}
+.animate-marquee-reverse {
+  animation-name: marquee-reverse;
+}
+.marquee:hover .animate-marquee,
+.marquee:hover .animate-marquee-reverse {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-reverse {
+    animation: none;
+  }
+}
+
+/* Respect users who prefer less motion (JS animations also guard on this). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
