@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/cn";
 import { LOCALES, LOCALE_META, localePath, swapLocale, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/en";
+import { consultationLoginUrl } from "@/lib/auth/callback";
 
 export default function Navbar({ lang, dict }: { lang: Locale; dict: Dictionary["nav"] }) {
   const [scrolled, setScrolled] = useState(false);
@@ -95,7 +96,7 @@ export default function Navbar({ lang, dict }: { lang: Locale; dict: Dictionary[
           </div>
 
           <Link
-            href={localePath(lang, "/consultation")}
+            href={consultationLoginUrl(lang)}
             onClick={close}
             className="hidden h-10 items-center rounded-full bg-ink px-5 text-[11px] font-semibold tracking-[0.14em] text-cream uppercase transition-colors hover:bg-gold sm:inline-flex"
           >
@@ -153,7 +154,7 @@ export default function Navbar({ lang, dict }: { lang: Locale; dict: Dictionary[
                 </Link>
               ))}
               <Link
-                href={localePath(lang, "/consultation")}
+                href={consultationLoginUrl(lang)}
                 onClick={close}
                 className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-ink px-5 text-sm font-medium text-cream"
               >

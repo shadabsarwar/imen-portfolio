@@ -1,6 +1,6 @@
 "use client";
 import type { Dictionary } from "@/dictionaries/en";
-import { localePath, type Locale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 
 import Link from "next/link";
 import { useRef } from "react";
@@ -8,6 +8,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { revealOnScroll } from "@/lib/reveal";
+import { consultationLoginUrl } from "@/lib/auth/callback";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -74,7 +75,7 @@ export default function ConsultationCTA({
 
           <div className="flex shrink-0 flex-col items-start gap-3 md:items-end">
             <Link
-              href={localePath(lang, "/consultation")}
+              href={consultationLoginUrl(lang)}
               className="group inline-flex h-12 items-center gap-2 rounded-full bg-gold px-7 text-sm font-medium text-ink transition-colors duration-300 hover:bg-cream"
             >
               {dict.cta}
