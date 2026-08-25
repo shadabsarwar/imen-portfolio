@@ -28,6 +28,32 @@ const en = {
     language: "Language",
   },
 
+  auth: {
+    eyebrow: "Private consultation",
+    title: "Welcome in.",
+    description: "Sign in to continue to your consultation, or create a Student or Developer account.",
+    securityNote: "Your account is protected with secure server-side sessions.",
+    tabs: { login: "Sign in", register: "Create account" },
+    google: "Continue with Google",
+    or: "or use email",
+    name: "Full name",
+    email: "Email address",
+    password: "Password",
+    passwordHint: "At least 10 characters, including a letter and a number.",
+    role: "I am joining as",
+    roles: { STUDENT: "Student", DEVELOPER: "Developer" },
+    submitLogin: "Sign in",
+    submitRegister: "Create account",
+    loading: "Please wait…",
+    switchToRegister: "New here? Create an account",
+    switchToLogin: "Already have an account? Sign in",
+    errors: {
+      invalid: "Check the information you entered and try again.",
+      exists: "An account with this email already exists. Try signing in instead.",
+      server: "We could not create your account right now. Please try again.",
+    },
+  },
+
   hero: {
     name: "Imene Adjissi",
     nameArabic: "إيمان عجيسي",
